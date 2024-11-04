@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component } from '@angular/core'; 
 
 @Component({
   selector: 'app-gastos',
@@ -17,6 +17,7 @@ export class GastosPage {
     this.categoria = '';
     this.fecha = '';
     this.notas = '';
+    this.cargarGastos();
   }
 
   agregarGasto() {
@@ -29,6 +30,7 @@ export class GastosPage {
       };
       this.gastos.push(nuevoGasto);
       this.limpiarFormulario();
+      this.guardarGastos();
     } else {
       alert('Por favor, completa todos los campos requeridos.');
     }
@@ -36,10 +38,11 @@ export class GastosPage {
 
   eliminarGasto(gasto: any) {
     this.gastos = this.gastos.filter(g => g !== gasto);
+    this.guardarGastos();
   }
 
   editarGasto(gasto: any) {
-    // Lógica para editar el gasto
+
     this.monto = gasto.monto;
     this.categoria = gasto.categoria;
     this.fecha = gasto.fecha;
@@ -52,5 +55,18 @@ export class GastosPage {
     this.categoria = '';
     this.fecha = '';
     this.notas = '';
+  }
+
+  
+  guardarGastos() {
+    localStorage.setItem('gastos', JSON.stringify(this.gastos));
+  }
+
+ 
+  cargarGastos() {
+    const gastosGuardados = localStorage.getItem('gastos');
+    if (gastosGuardados) {
+      this.gastos = JSON.parse(gastosGuardados);
+    }
   }
 }
